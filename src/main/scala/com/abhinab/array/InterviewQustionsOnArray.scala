@@ -1,6 +1,6 @@
 package com.abhinab.array
 
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 import scala.util.control.Breaks.{break, breakable}
 
 object InterviewQustionsOnArray {
@@ -120,20 +120,104 @@ object InterviewQustionsOnArray {
     sb.toString
   }
 
+  def missingNumber(num:Array[Int]): Int={
+    var missingNum = 0
+    var counter = num(0)
+    for(i <- 1 until num.length){
+      if(counter+1 != num(i)) missingNum = num(i-1)+1
+    }
+    missingNum
+  }
+
+  def alternateThirdMax(num:Array[Int]):Int ={
+    var num1 = 0
+    var num2 = 0
+    var num3 = 0
+    for(i <- 0 until num.length){
+      if(num(i) > num1){
+        num3 = num2
+        num2 = num1
+        num1 = num(i)
+      } else if(num(i) > num2){
+        num3 = num2
+        num2 = num(i)
+      } else if(num(i) > num3)num3 = num(i)
+    }
+    if(num3 == 0) num1 else num3
+  }
+
+  def thirdMax(num:Array[Int]): Int={
+    val sortedArray = num.sortWith(_ > _)
+    val thirdMax =   if(sortedArray.length < 3) sortedArray(0) else sortedArray(2)
+    thirdMax
+  }
+
+  def rotatingArray(num:Array[Int], position:Int):Array[Int] ={
+    var rotatedArray = num
+    for(i <- 0 until position){
+      var value = num(i)
+      //rotatedArray = value
+      rotatedArray = rotatedArray :+ value
+    }
+    rotatedArray
+  }
+
+  def maxProfit(prices:Array[Int]): Int={
+    var currentMax = 0
+    var maxSoFar = 0
+    for(i <- 1 until prices.length){
+      currentMax += prices(i) - prices(i - 1)
+      currentMax = math.max(0, currentMax)
+      maxSoFar = math.max(currentMax, maxSoFar)
+    }
+    maxSoFar
+  }
+
+  def maxProfitII(prices:Array[Int]):Int ={
+    var total = 0
+    for(i <- 0 until prices.length - 1){
+      if(prices(i + 1)>prices(i))
+        total += prices(i + 1) - prices(i)
+    }
+    total
+  }
+
+  def pascalTriangle(row: Int):Unit = {
+    for (i <- 0 to row){
+      for (j <- 0 to i) {
+        print(pascal(j, i) + " ")
+      }
+      println()
+    }
+  }
+
+  def pascalTriangleII(row:Int):List[Int]={
+    var lst = new ListBuffer[Int]()
+    for(i <- 0 to row)
+      lst = lst :+ pascal(i,row)
+    lst.toList
+  }
+
+  def pascal(c:Int, r:Int):Int =  if (c == 0 || c == r) 1   else pascal(c - 1, r - 1) + pascal(c, r - 1)
+
+
   def main(args: Array[String]): Unit = {
     val l1 = new ListNode()
     val num = Array(100,4,200,1,3,2)
-    val num1 = Array(1,2,3)
+    val missingNumArray = Array(1,2,3,5)
     val num2 = Array(3,2,2,3)
     println("Removing element from array :"+ removeElement(num2,3))
-    println("@@@@@"+removeDuplicates(num1))
-    println(intReverse(1534236469))
-    println(isPalindrome(1534236469))
-    println(longestConSeq(num))
-    println(longestNonRepeatativeSequence("abcahjlu"))
+    println("@@@@@"+removeDuplicates(num2))
+    println("Reversal of the number is "+intReverse(1534236469))
+    println("The number is palindrome "+isPalindrome(1534236469))
+    println("Longest Consecutive Sequence is "+longestConSeq(num))
+    println("Longest Non-Repeatative Sequence is "+longestNonRepeatativeSequence("abcahjlu"))
+    println("Third Max number in an Array is : "+thirdMax(num))
+    println("Third Max number in an Array is : "+alternateThirdMax(num))
+    println("Missing number in the array is :"+missingNumber(missingNumArray))
+    println("Max profit from selling stocks is: "+ maxProfit(num))
+    println("Max profit from selling stocks is: "+ maxProfitII(num))
+    println("pasccal's Triangle"+pascalTriangle(5))
+    println("pasccal's Triangle ith row "+pascalTriangleII(5))
   }
-}
-class ListNode(var _x: Int = 0) {
-  var next: ListNode = null
-  var x: Int = _x
 }
