@@ -53,9 +53,32 @@ object InterviewQuestionsOnString {
     return stk.isEmpty
   }
 
+  def lengthOfLastWord(str:String):Int = str.trim.length - str.trim.lastIndexOf(" ") - 1
+
+  def binaryAddition(str1:String, str2:String):String={
+    var str = ""
+    var carry = 0
+    val len1 = str1.length
+    val len2 = str2.length
+    val maxLength = math.max(len1,len2)
+    for(i <- 0 until maxLength){
+      val p = if(i < len1) str1.charAt(len1 - i - 1) - '0' else '0'
+      val q = if(i < len2) str2.charAt(len2 - i - 1) - '0' else '0'
+      val tmp = p + q + carry
+      carry = tmp/2
+      str = tmp%2 + str
+    }
+    str
+  }
+
+  def reverseString(str:String):String=  (for(i <- str.length - 1 to 0 by -1) yield str(i)).mkString
+
   def main(args: Array[String]): Unit = {
     println("Roman integer to Integer conversion is "+romanLiteralToNumberConversion("IV"))
     println("longest common prefix is "+longestCommonPrefix(Array("abc","b","ab","abcd")))
     println("valid parenthesis "+validParenthisis("()[{}[]"))
+    println("Length of last word is "+lengthOfLastWord("Abhinab Is OK"))
+    println("binary Addition is "+binaryAddition("1010","10"))
+    println("String Reversal is "+reverseString("man"))
   }
 }
