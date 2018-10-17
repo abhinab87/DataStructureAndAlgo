@@ -1,4 +1,4 @@
-package com.abhinab.array
+package com.abhinab.string
 
 import java.util
 
@@ -71,7 +71,52 @@ object InterviewQuestionsOnString {
     str
   }
 
-  def reverseString(str:String):String=  (for(i <- str.length - 1 to 0 by -1) yield str(i)).mkString
+  def reverseString(str:String):String =  (for(i <- str.length - 1 to 0 by -1) yield str(i)).mkString
+
+  def reverseVowels(str:String):String ={
+
+    str
+  }
+
+  def firstUniqueChar(str:String):Int ={
+    val ab = new StringBuffer()
+    for(i <- 0 until str.length){
+      if(str.count(_ == str(i)) == 1) ab.append(str(i))
+    }
+    val nonRepStr = ab.toString.toCharArray
+    str.indexOf(nonRepStr(0))
+  }
+
+  def countSegments(str:String):Int = str.split(" ").length
+
+  def repeatedSubstringPatteren(str:String):Boolean ={
+    val length = str.length
+    for(i <- length/2 until 0 by -1){
+      if(length % i == 0){
+        val sb = new StringBuilder
+        val mid = length/i
+        val sub = str.substring(0,i)
+        for(j <- 0 until mid){
+          sb.append(sub)
+        }
+        if(sb.toString().equalsIgnoreCase(str))
+          return true
+      }
+    }
+    return false
+  }
+
+  def timeConversion(str:String):String =
+    if(str.substring(str.length-2, str.length).equalsIgnoreCase("AM")) {
+      str
+    } else if(str.substring(str.length-2, str.length).equalsIgnoreCase("PM")){
+      val hour = str.substring(0,2).toInt + 12
+      hour.toString+str.substring(2,str.length)
+    }else{
+      "Not valid Input"
+    }
+
+  def superReducedString(acc:String, c:Char):String = if(acc.length > 0 && acc.charAt(acc.length - 1) == c) acc.substring(0,acc.length - 1) else acc + c
 
   def main(args: Array[String]): Unit = {
     println("Roman integer to Integer conversion is "+romanLiteralToNumberConversion("IV"))
@@ -80,5 +125,10 @@ object InterviewQuestionsOnString {
     println("Length of last word is "+lengthOfLastWord("Abhinab Is OK"))
     println("binary Addition is "+binaryAddition("1010","10"))
     println("String Reversal is "+reverseString("man"))
+    println("Index of First unique charecter in the string is "+firstUniqueChar("eetlCode"))
+    println("number of segments in the string are "+countSegments("This is Testing..."))
+    println("The string is having repeated patteren "+repeatedSubstringPatteren("aba"))
+    println("The new time is "+timeConversion("03:12:23LM"))
+    println("Super Reduced String is "+"baabd".foldLeft("")(superReducedString))
   }
 }
