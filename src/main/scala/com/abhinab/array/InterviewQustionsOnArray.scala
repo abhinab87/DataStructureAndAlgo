@@ -81,7 +81,7 @@ object InterviewQustionsOnArray {
     flag
   }
 
-  def mergeTwoLists(l1: ListNode, l2: ListNode): ListNode = {
+  def mergeTwoLists(l1: ListNode1, l2: ListNode1): ListNode1 = {
     if(l1 == null)
       return l2
     if(l2 == null)
@@ -200,9 +200,55 @@ object InterviewQustionsOnArray {
 
   def pascal(c:Int, r:Int):Int =  if (c == 0 || c == r) 1   else pascal(c - 1, r - 1) + pascal(c, r - 1)
 
+  def merge(num1:Array[Int], num2:Array[Int]):Array[Int] ={
+    var result = Array.fill(num1.length + num2.length)(0)
+
+    var i: Int = 0
+    var j: Int = 0
+
+    while (i < num1.length || j < num2.length){
+      if (i >= num1.length){
+        result(i+j) = num2(j)
+        j+=1
+      } else if (j >= num2.length || num1(i) <= num2(j)) {
+        result(i+j) = num1(i)
+        i+=1
+      } else {
+        result(i+j) = num2(j)
+        j+=1
+      }
+    }
+    return result
+  }
+
+  def hasCycle(head:ListNode1):Boolean ={
+    if(head == null) {
+      return false
+    } else{
+      var walker = head
+      var runner = head
+      while(runner.next != null && runner.next.next != null){
+        walker = walker.next
+        runner = runner.next.next
+        if(walker == runner) return true
+      }
+      return false
+    }
+  }
+
+  def twoSum(nums: List[Int], target: Int): List[List[Int]] =
+    nums.combinations(2).collect {
+      case couple if couple.sum == target =>
+        couple.map(nums.indexOf)
+    }.toList
+
+  def intersection(ar1:Array[Int], ar2:Array[Int]):Array[Int] =
+    ar2.map{ x =>
+      if(ar1.contains(x)) x else 0
+    }.filter(_ != 0)
 
   def main(args: Array[String]): Unit = {
-    val l1 = new ListNode()
+    val l1 = new ListNode1()
     val num = Array(100,4,200,1,3,2)
     val missingNumArray = Array(1,2,3,5)
     val num2 = Array(3,2,2,3)
@@ -217,7 +263,11 @@ object InterviewQustionsOnArray {
     println("Missing number in the array is :"+missingNumber(missingNumArray))
     println("Max profit from selling stocks is: "+ maxProfit(num))
     println("Max profit from selling stocks is: "+ maxProfitII(num))
-    println("pasccal's Triangle"+pascalTriangle(5))
-    println("pasccal's Triangle ith row "+pascalTriangleII(5))
+    println("pascal's Triangle"+pascalTriangle(5))
+    println("pascal's Triangle ith row "+pascalTriangleII(5))
+    println("merged array is "+merge(Array(1,2,3),Array(0,2,3,4)).toList)
+    println("list node has cycle")
+    println("two sum on sorted array is "+twoSum(List(1,45,46,78,79),47))
+    println("intersection of two elements are "+intersection(Array(1,2,3),Array(2,2)).toList)
   }
 }
