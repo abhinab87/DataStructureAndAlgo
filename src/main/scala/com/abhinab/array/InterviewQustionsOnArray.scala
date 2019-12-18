@@ -1,5 +1,6 @@
 package com.abhinab.array
 
+import scala.collection.mutable
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 import scala.util.control.Breaks.{break, breakable}
 
@@ -247,6 +248,69 @@ object InterviewQustionsOnArray {
       if(ar1.contains(x)) x else 0
     }.filter(_ != 0)
 
+  def findMedianSortedArrays(nums1: Array[Int], nums2: Array[Int]): Double = {
+    val ab = new ArrayBuffer[Int]()
+    val len1 = nums1.length
+    val len2 = nums2.length
+    var i = 0
+    var j = 0
+    while(i < len1 && j < len2){
+      if(nums1(i) < nums2(j)){
+        ab.append(nums1(i))
+        i = i + 1
+      } else {
+        ab.append(nums2(j))
+        j = j + 1
+      }
+    }
+    while(i < len1){
+      ab.append(nums1(i))
+      i = i + 1
+    }
+    while(j < len2){
+      ab.append(nums2(j))
+      j = j + 1
+    }
+    println("!!!!!!!!"+ab.toList)
+    if(ab.length%2 != 0) ab(ab.length/2).toDouble
+    else (ab(ab.length/2) + ab(ab.length/2 - 1)) / 2.toDouble
+  }
+
+  def rotate(nums: Array[Int], k: Int): Unit = {
+    var temp = 0
+    for(i <- 0 to k-1){
+      temp = nums(nums.length - 1)
+      for(j <- nums.length - 1 until 0 by -1){
+        nums(j) = nums(j-1)
+      }
+      nums(0) = temp
+    }
+  }
+
+  def threeSum(nums: Array[Int]): List[List[Int]] = {
+    var lst = new ListBuffer[List[Int]]()
+    val map = scala.collection.mutable.Map[Int,Int]()
+    val list = new ListBuffer[Int]()
+    var temp = 0
+    for(i<- 0 until nums.length) {
+      temp = nums(i)
+      for(j <- 0 until nums.length){
+        if(map.contains(nums(j))) {
+          list += nums(j)
+          list += map.get(nums(j)).get
+        } else
+          map.put(temp-nums(j), nums(j))
+      }
+      lst += list.toList
+      /*lst = nums.combinations(2).collect {
+        case couple if couple.sum == 0-temp =>
+          couple
+      }.toList.filter(x => !x.isEmpty).map(x => temp :: x.toList)*/
+      println(lst)
+    }
+    lst.toList
+  }
+
   def main(args: Array[String]): Unit = {
     val l1 = new ListNode1()
     val num = Array(100,4,200,1,3,2)
@@ -269,5 +333,8 @@ object InterviewQustionsOnArray {
     println("list node has cycle")
     println("two sum on sorted array is "+twoSum(List(1,45,46,78,79),47))
     println("intersection of two elements are "+intersection(Array(1,2,3),Array(2,2)).toList)
+    println("Median of sorted array "+ findMedianSortedArrays(Array(1,2), Array(3,4)))
+    println("rotating an Array"+rotate(Array(1,2,3,4,5,6,7),3))
+    println("threeSum of an array is "+threeSum(Array(1,0,-1,2,-4,-1)))
   }
 }

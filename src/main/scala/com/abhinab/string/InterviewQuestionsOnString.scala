@@ -1,6 +1,9 @@
 package com.abhinab.string
 
 import java.util
+import java.util.HashMap
+import scala.util.control.Breaks._
+import scala.collection.mutable.ListBuffer
 
 object InterviewQuestionsOnString {
 
@@ -26,7 +29,31 @@ object InterviewQuestionsOnString {
     sum
   }
 
+  def longestCommonSubsequence(text1: String, text2: String): Int = {
+    val sb = new StringBuilder()
+    val len = math.min(text1.length,text2.length)
+    val firstCharArray = if(text1.length >= text2.length) text1.toCharArray else text2.toCharArray
+    val lastCharArray = if(text1.length >= text2.length) text2.toCharArray else text1.toCharArray
+    for(i <- 0 until len){
+      if(firstCharArray.contains(lastCharArray(i)) && sb.length == 0){
+          sb.append(lastCharArray(i))
+      }else if(firstCharArray.contains(lastCharArray(i)) && sb.length >= 0 && firstCharArray.indexOf(sb(sb.length-1)) < firstCharArray.indexOf(lastCharArray(i))) {
+        sb.append(lastCharArray(i))
+    } else {
+        sb
+      }
+    }
+    sb.length
+  }
+
+  def removeDuplicates(nums: Array[Int]): Array[Int] = if(nums.length == 0 || nums.length == 1) nums else nums.filter(x => nums.count(_ == x) == 1)
+
+  def longestCommonPrefixBetweenStrings(str1:String, str2:String):String = str1.zip(str2).takeWhile(Function.tupled(_ == _)).map(_._1).mkString
+
+  def longestSuffix(str1: String, str2: String) = str1.reverseIterator.zip(str2.reverseIterator).takeWhile( c => c._1 == c._2).toList.reverseMap(c => c._1) mkString ""
+
   def longestCommonPrefix(str:Array[String]):String={
+    val lb = new ListBuffer[Int]
     val sb = new StringBuilder
     val sortedArray = str.sorted
     val firstCharArray = sortedArray(0).toCharArray
@@ -71,6 +98,19 @@ object InterviewQuestionsOnString {
     str
   }
 
+  def removeDuplicates1(nums: Array[Int]): Array[Int] = if(nums.length < 2) nums else {
+    var len = 0
+    val lb = new ListBuffer[Int]
+    for(i <- 1 until nums.length){
+      if(nums(i) != nums(len)) {
+        lb += nums(len)
+        len = len + 1
+      }
+    }
+    //if(nums(nums.length - 1) != nums(nums.length - 2)) lb += nums(nums.length-1) else lb
+    lb.toArray
+  }
+
   def reverseString(str:String):String =  (for(i <- str.length - 1 to 0 by -1) yield str(i)).mkString
 
   def reverseVowels(str:String):String ={
@@ -80,8 +120,13 @@ object InterviewQuestionsOnString {
 
   def firstUniqueChar(str:String):Int ={
     val ab = new StringBuffer()
-    for(i <- 0 until str.length){
-      if(str.count(_ == str(i)) == 1) ab.append(str(i))
+    breakable {
+      for (i <- 0 until str.length) {
+        if (str.count(_ == str(i)) == 1) {
+          ab.append(str(i))
+          break()
+        }
+      }
     }
     val nonRepStr = ab.toString.toCharArray
     str.indexOf(nonRepStr(0))
@@ -118,7 +163,21 @@ object InterviewQuestionsOnString {
 
   def superReducedString(acc:String, c:Char):String = if(acc.length > 0 && acc.charAt(acc.length - 1) == c) acc.substring(0,acc.length - 1) else acc + c
 
+  def lengthOfLongestSubstringWithoutRepeatingCharecter(str:String):Int = if(str.length == 0 || str.length == 1 ) str.length else {
+    var map = new HashMap[Char,Int]()
+    var i = 0
+    var ans = 0
+    for(j <- 0 until str.length){
+      if(map.containsKey(str.charAt(j))) i = math.max(map.get(str.charAt(j)), i)
+      ans = Math.max(ans, j - i + 1)
+      map.put(str.charAt(j), j + 1)
+    }
+    ans
+  }
+
   def main(args: Array[String]): Unit = {
+    println("Longest Common Prefix between two strings are: "+longestCommonPrefixBetweenStrings("Abhinab is OK","Abhishek is OK"))
+    println("Longest suffux between two strings are: "+longestSuffix("Abhinab is OK","Abhishek OK"))
     println("Roman integer to Integer conversion is "+romanLiteralToNumberConversion("IV"))
     println("longest common prefix is "+longestCommonPrefix(Array("abc","b","ab","abcd")))
     println("valid parenthesis "+validParenthisis("()[{}[]"))
@@ -128,7 +187,11 @@ object InterviewQuestionsOnString {
     println("Index of First unique charecter in the string is "+firstUniqueChar("eetlCode"))
     println("number of segments in the string are "+countSegments("This is Testing..."))
     println("The string is having repeated patteren "+repeatedSubstringPatteren("aba"))
-    println("The new time is "+timeConversion("03:12:23LM"))
+    println("The new time is "+timeConversion("03:12:23PM"))
     println("Super Reduced String is "+"baabd".foldLeft("")(superReducedString))
+    println("Length of Longest subString without repeating charecter is "+lengthOfLongestSubstringWithoutRepeatingCharecter("pwwkew"))
+    println("longest common sub sequence is "+longestCommonSubsequence("oxcpqrsvwf", "shmtulqrypy"))
   }
 }
+
+
