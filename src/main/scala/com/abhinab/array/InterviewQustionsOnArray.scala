@@ -163,6 +163,17 @@ object InterviewQustionsOnArray {
     rotatedArray
   }
 
+  /*def moveZerosToRight(num:Array[Int]):Array[Int] ={
+    var rotatedArray = new ArrayBuffer[Int]
+    for(i <- 0 until num.length){
+      if(num(i) == 0)
+        rotatedArray += 0
+      else
+        rotatedArray =+ num(i)
+    }
+    rotatedArray.toArray
+  }*/
+
   def maxProfit(prices:Array[Int]): Int={
     var currentMax = 0
     var maxSoFar = 0
@@ -243,11 +254,6 @@ object InterviewQustionsOnArray {
         couple.map(nums.indexOf)
     }.toList
 
-  def intersection(ar1:Array[Int], ar2:Array[Int]):Array[Int] =
-    ar2.map{ x =>
-      if(ar1.contains(x)) x else 0
-    }.filter(_ != 0)
-
   def findMedianSortedArrays(nums1: Array[Int], nums2: Array[Int]): Double = {
     val ab = new ArrayBuffer[Int]()
     val len1 = nums1.length
@@ -287,29 +293,11 @@ object InterviewQustionsOnArray {
     }
   }
 
-  def threeSum(nums: Array[Int]): List[List[Int]] = {
-    var lst = new ListBuffer[List[Int]]()
-    val map = scala.collection.mutable.Map[Int,Int]()
-    val list = new ListBuffer[Int]()
-    var temp = 0
-    for(i<- 0 until nums.length) {
-      temp = nums(i)
-      for(j <- 0 until nums.length){
-        if(map.contains(nums(j))) {
-          list += nums(j)
-          list += map.get(nums(j)).get
-        } else
-          map.put(temp-nums(j), nums(j))
-      }
-      lst += list.toList
-      /*lst = nums.combinations(2).collect {
-        case couple if couple.sum == 0-temp =>
-          couple
-      }.toList.filter(x => !x.isEmpty).map(x => temp :: x.toList)*/
-      println(lst)
-    }
-    lst.toList
-  }
+  /*TODO
+  * Find a triplet that sum to a given value
+  * 4SUM
+
+ */
 
   def main(args: Array[String]): Unit = {
     val l1 = new ListNode1()
@@ -332,9 +320,10 @@ object InterviewQustionsOnArray {
     println("merged array is "+merge(Array(1,2,3),Array(0,2,3,4)).toList)
     println("list node has cycle")
     println("two sum on sorted array is "+twoSum(List(1,45,46,78,79),47))
-    println("intersection of two elements are "+intersection(Array(1,2,3),Array(2,2)).toList)
+    //println("intersection of two elements are "+intersection(Array(1,2,3),Array(2,2)).toList)
     println("Median of sorted array "+ findMedianSortedArrays(Array(1,2), Array(3,4)))
     println("rotating an Array"+rotate(Array(1,2,3,4,5,6,7),3))
-    println("threeSum of an array is "+threeSum(Array(1,0,-1,2,-4,-1)))
+    //println("threeSum of an array is "+threeSum(Array(1,0,-1,2,-4,-1).toList))
+    //println(moveZerosToRight(Array(0,1,2,0)).toList)
   }
 }

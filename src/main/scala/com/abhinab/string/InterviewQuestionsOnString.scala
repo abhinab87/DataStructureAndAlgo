@@ -29,56 +29,11 @@ object InterviewQuestionsOnString {
     sum
   }
 
-  def longestCommonSubsequence(text1: String, text2: String): Int = {
-    val sb = new StringBuilder()
-    val len = math.min(text1.length,text2.length)
-    val firstCharArray = if(text1.length >= text2.length) text1.toCharArray else text2.toCharArray
-    val lastCharArray = if(text1.length >= text2.length) text2.toCharArray else text1.toCharArray
-    for(i <- 0 until len){
-      if(firstCharArray.contains(lastCharArray(i)) && sb.length == 0){
-          sb.append(lastCharArray(i))
-      }else if(firstCharArray.contains(lastCharArray(i)) && sb.length >= 0 && firstCharArray.indexOf(sb(sb.length-1)) < firstCharArray.indexOf(lastCharArray(i))) {
-        sb.append(lastCharArray(i))
-    } else {
-        sb
-      }
-    }
-    sb.length
-  }
-
   def removeDuplicates(nums: Array[Int]): Array[Int] = if(nums.length == 0 || nums.length == 1) nums else nums.filter(x => nums.count(_ == x) == 1)
 
   def longestCommonPrefixBetweenStrings(str1:String, str2:String):String = str1.zip(str2).takeWhile(Function.tupled(_ == _)).map(_._1).mkString
 
   def longestSuffix(str1: String, str2: String) = str1.reverseIterator.zip(str2.reverseIterator).takeWhile( c => c._1 == c._2).toList.reverseMap(c => c._1) mkString ""
-
-  def longestCommonPrefix(str:Array[String]):String={
-    val lb = new ListBuffer[Int]
-    val sb = new StringBuilder
-    val sortedArray = str.sorted
-    val firstCharArray = sortedArray(0).toCharArray
-    val lastCharArray = sortedArray(sortedArray.length - 1).toCharArray
-    for(i <- 0 until firstCharArray.length){
-      if(lastCharArray.length > i && lastCharArray(i) == firstCharArray(i)){
-        sb.append(lastCharArray(i))
-      } else {
-        sb
-      }
-    }
-    sb.toString
-  }
-
-  def validParenthisis(str: String): Boolean={
-    val stk = new util.Stack[Char]()
-    val charArray = str.toCharArray
-    for(i <- 0 until charArray.length){
-      if(charArray(i) == '(') stk.push(')')
-      else if(charArray(i) == '{') stk.push('}')
-      else if(charArray(i) == '[') stk.push(']')
-      else if(stk.isEmpty || stk.pop() != charArray(i)) return false
-    }
-    return stk.isEmpty
-  }
 
   def lengthOfLastWord(str:String):Int = str.trim.length - str.trim.lastIndexOf(" ") - 1
 
@@ -163,24 +118,12 @@ object InterviewQuestionsOnString {
 
   def superReducedString(acc:String, c:Char):String = if(acc.length > 0 && acc.charAt(acc.length - 1) == c) acc.substring(0,acc.length - 1) else acc + c
 
-  def lengthOfLongestSubstringWithoutRepeatingCharecter(str:String):Int = if(str.length == 0 || str.length == 1 ) str.length else {
-    var map = new HashMap[Char,Int]()
-    var i = 0
-    var ans = 0
-    for(j <- 0 until str.length){
-      if(map.containsKey(str.charAt(j))) i = math.max(map.get(str.charAt(j)), i)
-      ans = Math.max(ans, j - i + 1)
-      map.put(str.charAt(j), j + 1)
-    }
-    ans
-  }
-
   def main(args: Array[String]): Unit = {
     println("Longest Common Prefix between two strings are: "+longestCommonPrefixBetweenStrings("Abhinab is OK","Abhishek is OK"))
     println("Longest suffux between two strings are: "+longestSuffix("Abhinab is OK","Abhishek OK"))
     println("Roman integer to Integer conversion is "+romanLiteralToNumberConversion("IV"))
-    println("longest common prefix is "+longestCommonPrefix(Array("abc","b","ab","abcd")))
-    println("valid parenthesis "+validParenthisis("()[{}[]"))
+    //println("longest common prefix is "+longestCommonPrefix(Array("abc","abcde","ab","abcd")))
+    //println("valid parenthesis "+validParenthisis("()[{}[]"))
     println("Length of last word is "+lengthOfLastWord("Abhinab Is OK"))
     println("binary Addition is "+binaryAddition("1010","10"))
     println("String Reversal is "+reverseString("man"))
@@ -189,8 +132,9 @@ object InterviewQuestionsOnString {
     println("The string is having repeated patteren "+repeatedSubstringPatteren("aba"))
     println("The new time is "+timeConversion("03:12:23PM"))
     println("Super Reduced String is "+"baabd".foldLeft("")(superReducedString))
-    println("Length of Longest subString without repeating charecter is "+lengthOfLongestSubstringWithoutRepeatingCharecter("pwwkew"))
-    println("longest common sub sequence is "+longestCommonSubsequence("oxcpqrsvwf", "shmtulqrypy"))
+    //println("Length of Longest subString without repeating charecter is "+lengthOfLongestSubstringWithoutRepeatingCharecter("pwwkew"))
+    //println("longest common sub sequence is "+longestCommonSubsequence("oxcpqrsvwf", "shmtulqrypy"))
+    println(removeDuplicates1(Array(0,1,1,2,3,3)).toList)
   }
 }
 

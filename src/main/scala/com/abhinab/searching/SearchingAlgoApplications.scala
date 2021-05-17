@@ -6,38 +6,44 @@ object SearchingAlgoApplications {
 
   def main(args: Array[String]): Unit = {
     println("Missing Number is:" +missingNumber(Array(1,2,3,5,6)))
-    println("Element in rotated Array is: " + searchElementInRotatedArray(Array(3,4,5,1,2), 1))
+    println("Element in rotated Array is: " + searchElementInRotatedArray(Array(1,3 ), 1))
   }
 
   def missingNumber(array: Array[Int]):Int = ((array.length +2)*(array.length+1)/2) - array.sum
 
-  def searchElementInRotatedArray(array: Array[Int], target:Int):Option[Int] = {
-    @tailrec
-    def pivotRecursion(low:Int, high:Int):Option[Int] = (low + high)/2 match{
-      case _ if high < low => None
-      case mid if (array(mid) > array(mid + 1) && mid < high ) => Some(mid)
-      case mid if (array(mid) < array(mid - 1) && mid > low ) => Some(mid)
-      case mid if array(low) >= array(mid) => pivotRecursion(low, mid - 1)
-      case mid => pivotRecursion(mid + 1, high)
+
+  /**
+   *
+   * @param nums
+   * @param target
+   * @return Index of Target
+   *         time complexity O(log(n)) and space complexity O(1)
+   *         Reference: https://www.youtube.com/watch?v=e-84rG-c8AE
+   *         https://leetcode.com/problems/search-in-rotated-sorted-array/
+   */
+  def searchElementInRotatedArray(nums: Array[Int], target: Int): Int = if(nums.size == 0) -1 else{
+    var left = 0
+    var right = nums.size - 1
+    var mid = 0
+
+    while(left <= right){
+      mid = left + (right - left) / 2
+      if(nums(mid) == target) return mid
+      if(nums(left) <= nums(mid)){
+        if(target >= nums(left) && target <= nums(mid)){
+          right = mid - 1
+        }else{
+          left = mid + 1
+        }
+      } else{
+        if(target >= nums(mid) && target <= nums(right)){
+          left = mid + 1
+        }else{
+          right = mid - 1
+        }
+      }
     }
-
-    @tailrec
-    def binarySearchRecursion(low:Int, high:Int):Option[Int] = (low + high)/2 match{
-      case _ if high < low => None
-      case mid if array(mid) > target => binarySearchRecursion(low, mid - 1)
-      case mid if array(mid) < target => binarySearchRecursion(mid + 1, high)
-      case mid => Some(mid)
-    }
-
-    val pivot = pivotRecursion(0, array.length - 1)
-    val index = if(pivot.isDefined){
-      if(array(0) > target) binarySearchRecursion(pivot.get + 1, array.length - 1)
-      else if(array(0) < target) binarySearchRecursion(0, pivot.get - 1)
-      else if(array(0) == target) Some(0)
-      else None
-    } else None
-
-    index
+    -1
   }
 
 }
